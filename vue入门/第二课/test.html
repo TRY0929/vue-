@@ -2,26 +2,55 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>第三课</title>
-	<script src="../vue.js"></script>
+	<title>TodoList2</title>
+	<script type="text/javascript" src="../vue.js"></script>
 </head>
 <body>
 	<div id="app">
-		<span v-for='(item,name) of items'>{{ name }} --- {{ item }}</span>
-		<br />
-		<span v-for='item of list'>{{ item }} </span>
+		<input type="text" v-model='inputValue'>
+		<button v-on:click='handleBtnClick'>提交</button>
+		<ul>
+			<!-- <li v-for="item in list">{{ item }}</li> -->
+			<todo-item v-for='(item,index) in list'
+						v-bind:content='item'
+						v-bind:index='index'
+						@delete='handleItemDelete'>
+			</todo-item>
+		</ul>
 	</div>
-	<script type="text/javascript">
+	
+	<script>
+		// Vue.component('TodoItem',{
+		// 	props: ['content'],
+		// 	template: "<li>{{ content }}</li>"
+		// })
+		var TodoItem = {
+			props: ['content','index'],
+			template: "<li @click='handleItemClick'>{{ content }}</li>",
+			methods: {
+				handleItemClick: function() {
+					this.$emit('delete',this.index);
+				}
+			}
+		}
 		var app = new Vue({
 			el: '#app',
-			data: {
-				items: {
-					name: 'try',
-					age: '19',
-					hobby: 'Japannese'
-				},
-				list: [9, 2, 5, 3, 0]
+			components: {
+				TodoItem: TodoItem
 			},
+			data: {
+				list: [],
+				inputValue: ''
+			},
+			methods: {
+				handleBtnClick: function() {
+					this.list.push(this.inputValue);
+					this.inputValue = '';
+				},
+				handleItemDelete: function(index) {
+					this.list.splice(index,1);
+				}
+			}
 		})
 	</script>
 </body>
