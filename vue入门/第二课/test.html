@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>第三课</title>
+	<script src="../vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<span v-for='(item,name) of items'>{{ name }} --- {{ item }}</span>
+		<br />
+		<span v-for='item of list'>{{ item }} </span>
+	</div>
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#app',
+			data: {
+				items: {
+					name: 'try',
+					age: '19',
+					hobby: 'Japannese'
+				},
+				list: [9, 2, 5, 3, 0]
+			},
+		})
+	</script>
+</body>
+</html>
