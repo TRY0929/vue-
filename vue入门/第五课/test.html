@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>第五课</title>
+	<script src="../vue.js"></script>
+	<style type="text/css">
+		/*.v-enter,
+		.v-leave-to {
+			opacity: 0;
+		}
+		.v-enter-active,
+		.v-leave-active {
+			transition: opacity 1s;
+		}*/
+	</style>
+</head>
+<body>
+	<div id="root">
+		<button @click='handleBtnClick'>Change</button>
+		<fade :show='show'>
+			<div>Hello world</div>
+		</fade>
+	</div>
+	<script>
+		Vue.component('fade',{
+			props: ['show'],
+			template: `
+					<transition
+							@before-enter='handleBeforeEnter'
+							@enter='handleEnter'
+							@after-enter='handleAfterEnter'
+					>
+						<slot v-if='show'></slot>
+					</transition>
+					`,
+			methods: {
+				handleBeforeEnter: function(el) {
+					     el.style.color = 'red';
+					},
+				//动画运行中，done是回调函数
+				handleEnter: function(el,done) {
+				     setTimeout(()=>{
+				           el.style.color = 'pink';
+				     },2000);
+				     setTimeout(()=>{
+				           done(); //这里手动调用done是为了说明动画结束了，下面才会由afterenter
+				     },4000);
+				                },
+				//动画运行结束
+				handleAfterEnter: function(el) {
+				     el.style.color='skyblue';
+				}
+			}
+		})
+		var vm = new Vue({
+			el: '#root',
+			data: {
+				show: true
+			},
+			methods: {
+				handleBtnClick: function() {
+					this.show = !this.show;
+				}
+			}
+		})
+	</script>
+</body>
+</html>
